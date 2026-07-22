@@ -2,6 +2,8 @@ import os
 
 from flask import Flask
 
+import os
+
 from config import Config
 from models import db
 
@@ -13,6 +15,12 @@ def create_app():
     app = Flask(__name__)
 
     app.config.from_object(Config)
+
+    if app.config["SQLALCHEMY_DATABASE_URI"].startswith("postgres://"):
+    app.config["SQLALCHEMY_DATABASE_URI"] = (
+        app.config["SQLALCHEMY_DATABASE_URI"]
+        .replace("postgres://", "postgresql://", 1)
+    )
 
     os.makedirs(app.instance_path, exist_ok=True)
 
