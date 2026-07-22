@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block conteudo %}
+
+<h2 class="mb-4">
+📅 Controle de Validade
+</h2>
+
+<h4 class="text-danger">
+Produtos Vencidos
+</h4>
+
+<table class="table table-danger table-striped">
+
+<tr>
+<th>Produto</th>
+<th>Lote</th>
+<th>Validade</th>
+<th>Quantidade</th>
+</tr>
+
+{% for l in vencidos %}
+
+<tr>
+
+<td>{{ l.produto.nome }}</td>
+
+<td>{{ l.lote }}</td>
+
+<td>{{ l.validade.strftime("%d/%m/%Y") }}</td>
+
+<td>{{ l.quantidade }}</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+<hr>
+
+<h4 class="text-warning">
+Vencem nos próximos 7 dias
+</h4>
+
+<table class="table table-warning table-striped">
+
+<tr>
+<th>Produto</th>
+<th>Lote</th>
+<th>Validade</th>
+<th>Quantidade</th>
+</tr>
+
+{% for l in proximos %}
+
+<tr>
+
+<td>{{ l.produto.nome }}</td>
+
+<td>{{ l.lote }}</td>
+
+<td>{{ l.validade.strftime("%d/%m/%Y") }}</td>
+
+<td>{{ l.quantidade }}</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+{% endblock %}

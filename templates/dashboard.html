@@ -1,0 +1,259 @@
+{% extends "base.html" %}
+
+{% block conteudo %}
+
+<h2 class="mb-4">
+📊 Dashboard
+</h2>
+
+<div class="row">
+
+    <div class="col-md-3 mb-4">
+
+        <div class="card border-primary shadow">
+
+            <div class="card-body">
+
+                <h6>Total de Produtos</h6>
+
+                <h2>{{ total_produtos }}</h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-3 mb-4">
+
+        <div class="card border-danger shadow">
+
+            <div class="card-body">
+
+                <h6>Estoque Baixo</h6>
+
+                <h2>{{ estoque_baixo }}</h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-3 mb-4">
+
+        <div class="card border-success shadow">
+
+            <div class="card-body">
+
+                <h6>Valor do Estoque</h6>
+
+                <h4>R$ {{ "%.2f"|format(valor_total) }}</h4>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-3 mb-4">
+
+        <div class="card border-warning shadow">
+
+            <div class="card-body">
+
+                <h6>Lotes Vencidos</h6>
+
+                <h2>{{ vencidos }}</h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="card shadow">
+
+    <div class="card-header">
+
+        Últimas Movimentações
+
+    </div>
+
+    <div class="card-body">
+
+        <table class="table table-hover">
+
+            <thead>
+
+                <tr>
+
+                    <th>Data</th>
+
+                    <th>Produto</th>
+
+                    <th>Tipo</th>
+
+                    <th>Quantidade</th>
+
+                    <th>Responsável</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+            {% for m in movimentacoes %}
+
+                <tr>
+
+                    <td>{{ m.data.strftime("%d/%m/%Y %H:%M") }}</td>
+
+                    <td>{{ m.produto.nome }}</td>
+
+                    <td>{{ m.tipo }}</td>
+
+                    <td>{{ m.quantidade }}</td>
+
+                    <td>{{ m.responsavel }}</td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+<hr>
+
+<div class="card shadow mt-4">
+
+    <div class="card-header bg-danger text-white">
+
+        ⚠ Produtos com Estoque Baixo
+
+    </div>
+
+    <div class="card-body">
+
+        {% if produtos_baixo %}
+
+        <table class="table table-striped">
+
+            <thead>
+
+                <tr>
+
+                    <th>Produto</th>
+                    <th>Estoque Atual</th>
+                    <th>Estoque Mínimo</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+            {% for p in produtos_baixo %}
+
+                <tr>
+
+                    <td>{{ p.nome }}</td>
+
+                    <td>{{ "%.2f"|format(p.estoque_atual) }}</td>
+
+                    <td>{{ "%.2f"|format(p.estoque_minimo) }}</td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+        {% else %}
+
+        <div class="alert alert-success mb-0">
+
+            Nenhum produto está abaixo do estoque mínimo.
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+<hr>
+
+<div class="card shadow mt-4">
+
+    <div class="card-header">
+
+        📊 Entradas x Saídas
+
+    </div>
+
+    <div class="card-body">
+
+        <canvas id="graficoMovimentacoes"></canvas>
+
+    </div>
+
+</div>
+
+<script>
+
+const ctx = document.getElementById('graficoMovimentacoes');
+
+new Chart(ctx, {
+
+    type: 'bar',
+
+    data: {
+
+        labels: ['Entradas','Saídas'],
+
+        datasets: [{
+
+            label: 'Quantidade',
+
+            data: [
+
+                {{ entradas }},
+
+                {{ saidas }}
+
+            ]
+
+        }]
+
+    },
+
+    options: {
+
+        responsive:true,
+
+        plugins:{
+            legend:{
+                display:false
+            }
+        }
+
+    }
+
+});
+
+</script>
+
+{% endblock %}

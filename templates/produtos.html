@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+
+{% block conteudo %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+<h2>Produtos</h2>
+
+<a href="/produtos/novo" class="btn btn-success">
+
+<i class="bi bi-plus-circle"></i>
+
+Novo Produto
+
+</a>
+
+</div>
+
+<form class="mb-3">
+
+<div class="input-group">
+
+<input
+type="text"
+name="q"
+value="{{ busca }}"
+placeholder="Pesquisar produto..."
+class="form-control">
+
+<button class="btn btn-outline-success">
+
+Pesquisar
+
+</button>
+
+</div>
+
+</form>
+
+<table class="table table-hover table-striped">
+
+<thead>
+
+<tr>
+
+<th>ID</th>
+
+<th>Produto</th>
+
+<th>Categoria</th>
+
+<th>Unidade</th>
+
+<th>Estoque</th>
+
+<th width="180">
+
+Ações
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+{% for p in produtos %}
+
+<tr>
+
+<td>{{ p.id }}</td>
+
+<td>{{ p.nome }}</td>
+
+<td>{{ p.categoria }}</td>
+
+<td>{{ p.unidade }}</td>
+
+<td>{{ "%.2f"|format(p.estoque_atual) }}</td>
+
+<td>
+
+<a
+href="/produtos/{{p.id}}/editar"
+class="btn btn-warning btn-sm">
+
+Editar
+
+</a>
+
+<a
+href="/produtos/{{p.id}}/excluir"
+class="btn btn-danger btn-sm"
+onclick="return confirm('Excluir este produto?')">
+
+Excluir
+
+</a>
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+{% endblock %}
