@@ -18,6 +18,10 @@ body{
     height:72px;
     background:linear-gradient(90deg,#198754,#25a56a)!important;
     box-shadow:0 8px 25px rgba(0,0,0,.12);
+
+    position:sticky;
+    top:0;
+    z-index:1050;
 }
 
 .navbar-brand{
@@ -463,5 +467,76 @@ font-size:30px;
 .creditos-tooltip hr{
 
     margin:12px 0;
+
+}
+
+/* MOBILE */
+
+@media (max-width:768px){
+
+.menu-lateral{
+
+display:none;
+
+}
+
+.conteudo{
+
+padding:20px;
+
+width:100%;
+
+}
+
+.offcanvas{
+
+width:260px;
+
+}
+
+}
+
+.offcanvas-header{
+    background:#198754;
+    color:white;
+}
+
+.offcanvas-title{
+    font-weight:700;
+}
+
+.offcanvas-body{
+    padding:20px;
+}
+
+.offcanvas .menu-item{
+    margin-bottom:10px;
+}
+
+.card-dashboard{
+    animation:fadeCard .45s ease;
+}
+
+@keyframes fadeCard{
+
+from{
+    opacity:0;
+    transform:translateY(20px);
+}
+
+to{
+    opacity:1;
+    transform:translateY(0);
+}
+
+}
+
+.menu-item.ativo{
+
+background:linear-gradient(90deg,#198754,#2dbf80);
+
+color:white;
+
+box-shadow:0 8px 18px rgba(25,135,84,.25);
 
 }
