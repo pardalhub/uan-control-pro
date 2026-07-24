@@ -12,3 +12,4 @@ from . import compras
 from . import entrada
 from . import saida
 from . import validade
+from . import relatorio

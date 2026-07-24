@@ -32,7 +32,6 @@ def dashboard():
         )
 
         if ultima and ultima.valor_unitario:
-
             valor_total += (
                 produto.estoque_atual *
                 ultima.valor_unitario
@@ -43,11 +42,11 @@ def dashboard():
     ).count()
 
     produtos_baixo = (
-    Produto.query
-    .filter(Produto.estoque_atual <= Produto.estoque_minimo)
-    .order_by(Produto.nome)
-    .all()
-)
+        Produto.query
+        .filter(Produto.estoque_atual <= Produto.estoque_minimo)
+        .order_by(Produto.nome)
+        .all()
+    )
 
     movimentacoes = (
         Movimentacao.query
@@ -56,20 +55,26 @@ def dashboard():
         .all()
     )
 
+    entradas = db.session.query(
+        func.sum(Movimentacao.quantidade)
+    ).filter(
+        Movimentacao.tipo == "ENTRADA"
+    ).scalar() or 0
+
+    saidas = db.session.query(
+        func.sum(Movimentacao.quantidade)
+    ).filter(
+        Movimentacao.tipo == "SAIDA"
+    ).scalar() or 0
+
     return render_template(
-
         "dashboard.html",
-
         total_produtos=total_produtos,
-
         estoque_baixo=estoque_baixo,
-
         valor_total=valor_total,
-
         vencidos=vencidos,
-
         movimentacoes=movimentacoes,
-
-        produtos_baixo=produtos_baixo
-
+        produtos_baixo=produtos_baixo,
+        entradas=entradas,
+        saidas=saidas
     )

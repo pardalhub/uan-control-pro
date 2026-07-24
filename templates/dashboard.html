@@ -2,71 +2,109 @@
 
 {% block conteudo %}
 
-<h2 class="mb-4">
-📊 Dashboard
-</h2>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold">Dashboard</h2>
+        <p class="text-muted mb-0">
+            Bem-vindo ao <strong>UAN Control Pro</strong>
+        </p>
+    </div>
 
-<div class="row">
+    <div>
+        <a href="/relatorio/pdf" class="btn btn-success">
+            <i class="bi bi-file-earmark-pdf-fill"></i>
+            Gerar Relatório
+        </a>
+    </div>
+</div>
 
-    <div class="col-md-3 mb-4">
+<div class="row g-4">
 
-        <div class="card border-primary shadow">
+    <div class="col-lg-3">
+        <div class="card card-dashboard card-verde p-4">
+            <div class="d-flex justify-content-between">
+                <div>
+                    <div class="titulo">Produtos</div>
+                    <div class="numero">{{ total_produtos }}</div>
+                </div>
 
-            <div class="card-body">
-
-                <h6>Total de Produtos</h6>
-
-                <h2>{{ total_produtos }}</h2>
-
+                <i class="bi bi-box-seam-fill fs-1 text-success"></i>
             </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3">
+        <div class="card card-dashboard card-verde p-4">
+            <div class="d-flex justify-content-between">
+                <div>
+                    <div class="titulo">Estoque Baixo</div>
+                    <div class="numero text-warning">{{ estoque_baixo }}</div>
+                </div>
+
+                <i class="bi bi-exclamation-triangle-fill fs-1 text-warning"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3">
+        <div class="card card-dashboard card-vermelho p-4">
+            <div class="d-flex justify-content-between">
+                <div>
+                    <div class="titulo">Produtos Vencidos</div>
+                    <div class="numero text-danger">{{ vencidos }}</div>
+                </div>
+
+                <i class="bi bi-calendar-x-fill fs-1 text-danger"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3">
+        <div class="card card-dashboard card-azul p-4">
+            <div class="d-flex justify-content-between">
+                <div>
+                    <div class="titulo">Valor do Estoque</div>
+                    <div class="numero text-primary">
+                        R$ {{ "%.2f"|format(valor_total) }}
+                    </div>
+                </div>
+
+                <i class="bi bi-cash-stack fs-1 text-primary"></i>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="row mt-4">
+
+    <div class="row mt-4">
+
+    <div class="col-lg-6">
+
+        <div class="card card-dashboard p-4">
+
+            <h5 class="mb-4">
+                <i class="bi bi-bar-chart-fill"></i>
+                Entradas x Saídas
+            </h5>
+
+            <canvas id="graficoMovimentacoes"></canvas>
 
         </div>
 
     </div>
 
-    <div class="col-md-3 mb-4">
+    <div class="col-lg-6">
 
-        <div class="card border-danger shadow">
+        <div class="card card-dashboard p-4">
 
-            <div class="card-body">
+            <h5 class="mb-4">
+                <i class="bi bi-pie-chart-fill"></i>
+                Situação do Estoque
+            </h5>
 
-                <h6>Estoque Baixo</h6>
-
-                <h2>{{ estoque_baixo }}</h2>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <div class="col-md-3 mb-4">
-
-        <div class="card border-success shadow">
-
-            <div class="card-body">
-
-                <h6>Valor do Estoque</h6>
-
-                <h4>R$ {{ "%.2f"|format(valor_total) }}</h4>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <div class="col-md-3 mb-4">
-
-        <div class="card border-warning shadow">
-
-            <div class="card-body">
-
-                <h6>Lotes Vencidos</h6>
-
-                <h2>{{ vencidos }}</h2>
-
-            </div>
+            <canvas id="graficoResumo"></canvas>
 
         </div>
 
@@ -74,139 +112,96 @@
 
 </div>
 
-<div class="card shadow">
+    <div class="col-lg-8">
 
-    <div class="card-header">
+        <div class="card card-dashboard p-4">
 
-        Últimas Movimentações
+            <h5 class="mb-3">
+                Últimas movimentações
+            </h5>
 
-    </div>
+            <table class="table table-hover">
 
-    <div class="card-body">
+                <thead>
 
-        <table class="table table-hover">
+                    <tr>
+                        <th>Produto</th>
+                        <th>Tipo</th>
+                        <th>Qtd.</th>
+                        <th>Data</th>
+                    </tr>
 
-            <thead>
+                </thead>
 
-                <tr>
+                <tbody>
 
-                    <th>Data</th>
-
-                    <th>Produto</th>
-
-                    <th>Tipo</th>
-
-                    <th>Quantidade</th>
-
-                    <th>Responsável</th>
-
-                </tr>
-
-            </thead>
-
-            <tbody>
-
-            {% for m in movimentacoes %}
+                {% for m in movimentacoes %}
 
                 <tr>
-
-                    <td>{{ m.data.strftime("%d/%m/%Y %H:%M") }}</td>
 
                     <td>{{ m.produto.nome }}</td>
 
-                    <td>{{ m.tipo }}</td>
+                    <td>
+
+                        {% if m.tipo=="ENTRADA" %}
+
+                        <span class="badge bg-success">Entrada</span>
+
+                        {% else %}
+
+                        <span class="badge bg-danger">Saída</span>
+
+                        {% endif %}
+
+                    </td>
 
                     <td>{{ m.quantidade }}</td>
 
-                    <td>{{ m.responsavel }}</td>
+                    <td>{{ m.data.strftime('%d/%m/%Y') }}</td>
 
                 </tr>
 
-            {% endfor %}
+                {% endfor %}
 
-            </tbody>
+                </tbody>
 
-        </table>
-
-    </div>
-
-</div>
-
-<hr>
-
-<div class="card shadow mt-4">
-
-    <div class="card-header bg-danger text-white">
-
-        ⚠ Produtos com Estoque Baixo
-
-    </div>
-
-    <div class="card-body">
-
-        {% if produtos_baixo %}
-
-        <table class="table table-striped">
-
-            <thead>
-
-                <tr>
-
-                    <th>Produto</th>
-                    <th>Estoque Atual</th>
-                    <th>Estoque Mínimo</th>
-
-                </tr>
-
-            </thead>
-
-            <tbody>
-
-            {% for p in produtos_baixo %}
-
-                <tr>
-
-                    <td>{{ p.nome }}</td>
-
-                    <td>{{ "%.2f"|format(p.estoque_atual) }}</td>
-
-                    <td>{{ "%.2f"|format(p.estoque_minimo) }}</td>
-
-                </tr>
-
-            {% endfor %}
-
-            </tbody>
-
-        </table>
-
-        {% else %}
-
-        <div class="alert alert-success mb-0">
-
-            Nenhum produto está abaixo do estoque mínimo.
+            </table>
 
         </div>
 
-        {% endif %}
-
     </div>
 
-</div>
+    <div class="col-lg-4">
 
-<hr>
+        <div class="card card-dashboard p-4">
 
-<div class="card shadow mt-4">
+            <h5 class="mb-3">
+                Produtos abaixo do mínimo
+            </h5>
 
-    <div class="card-header">
+            {% for p in produtos_baixo %}
 
-        📊 Entradas x Saídas
+            <div class="d-flex justify-content-between border-bottom py-2">
 
-    </div>
+                <span>{{ p.nome }}</span>
 
-    <div class="card-body">
+                <span class="badge bg-warning text-dark">
 
-        <canvas id="graficoMovimentacoes"></canvas>
+                    {{ p.estoque_atual }}
+
+                </span>
+
+            </div>
+
+            {% else %}
+
+            <p class="text-success">
+                Nenhum produto abaixo do mínimo.
+            </p>
+
+            {% endfor %}
+
+        </div>
 
     </div>
 
@@ -214,43 +209,73 @@
 
 <script>
 
-const ctx = document.getElementById('graficoMovimentacoes');
+new Chart(document.getElementById("graficoMovimentacoes"),{
 
-new Chart(ctx, {
+type:"bar",
 
-    type: 'bar',
+data:{
 
-    data: {
+labels:["Entradas","Saídas"],
 
-        labels: ['Entradas','Saídas'],
+datasets:[{
 
-        datasets: [{
+label:"Movimentações",
 
-            label: 'Quantidade',
+data:[{{ entradas }},{{ saidas }}],
 
-            data: [
+borderRadius:8
 
-                {{ entradas }},
+}]
 
-                {{ saidas }}
+},
 
-            ]
+options:{
 
-        }]
+plugins:{
 
-    },
+legend:{
 
-    options: {
+display:false
 
-        responsive:true,
+}
 
-        plugins:{
-            legend:{
-                display:false
-            }
-        }
+}
 
-    }
+}
+
+});
+
+new Chart(document.getElementById("graficoResumo"),{
+
+type:"doughnut",
+
+data:{
+
+labels:[
+
+"Produtos",
+
+"Estoque Baixo",
+
+"Vencidos"
+
+],
+
+datasets:[{
+
+data:[
+
+{{ total_produtos }},
+
+{{ estoque_baixo }},
+
+{{ vencidos }}
+
+]
+
+}]
+
+}
 
 });
 

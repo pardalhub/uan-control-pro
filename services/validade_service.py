@@ -6,7 +6,7 @@ def listar_validade():
 
     hoje = date.today()
 
-    sete_dias = hoje + timedelta(days=7)
+    trinta_dias = hoje + timedelta(days=30)
 
     vencidos = (
         Lote.query
@@ -19,7 +19,7 @@ def listar_validade():
         Lote.query
         .filter(
             Lote.validade >= hoje,
-            Lote.validade <= sete_dias
+            Lote.validade <= trinta_dias
         )
         .order_by(Lote.validade)
         .all()
