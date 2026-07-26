@@ -1,3 +1,4 @@
+from flask_login import login_required
 from sqlalchemy import func
 
 from flask import render_template
@@ -11,6 +12,9 @@ from models import Lote
 
 
 @main.route("/")
+
+@login_required
+
 def dashboard():
 
     total_produtos = Produto.query.count()

@@ -38,7 +38,34 @@ data-bs-target="#menuMobile">
 </button>
 
 <a class="navbar-brand fw-bold ms-2" href="/">
-🏥 UAN CONTROL PRO
+<div class="d-flex justify-content-between w-100 align-items-center">
+
+    <a class="navbar-brand fw-bold" href="/">
+        🏥 UAN Control Pro
+    </a>
+
+    {% if current_user.is_authenticated %}
+
+    <div class="text-white">
+
+        <i class="bi bi-person-circle"></i>
+
+        {{ current_user.nome }}
+
+        |
+
+        <a href="{{ url_for('main.logout') }}"
+           class="text-white text-decoration-none">
+
+            Sair
+
+        </a>
+
+    </div>
+
+    {% endif %}
+
+</div>
 </a>
 
 </div>
@@ -146,6 +173,11 @@ Lista de Compras
 {% endblock %}
 
 </div>
+
+<a href="/usuarios" class="menu-item">
+    <i class="bi bi-people-fill"></i>
+    Usuários
+</a>
 
 </div>
 

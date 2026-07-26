@@ -13,3 +13,5 @@ from . import entrada
 from . import saida
 from . import validade
 from . import relatorio
+from . import auth
+from . import usuarios
