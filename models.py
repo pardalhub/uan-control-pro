@@ -156,3 +156,27 @@ class Usuario(UserMixin, db.Model):
 
     def verificar_senha(self, senha):
         return check_password_hash(self.senha, senha)
+
+        # =====================================================
+# IA
+# =====================================================
+
+class AnaliseIA(db.Model):
+
+    __tablename__ = "analises_ia"
+
+    id = db.Column(db.Integer, primary_key=True)
+
+    pergunta = db.Column(db.Text, nullable=False)
+
+    resposta = db.Column(db.Text, nullable=False)
+
+    usuario = db.Column(db.String(120))
+
+    data = db.Column(
+        db.DateTime,
+        default=datetime.now
+    )
+
+    def __repr__(self):
+        return f"<AnaliseIA {self.id}>"

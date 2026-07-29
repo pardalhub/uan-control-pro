@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block conteudo %}
+
+<h2 class="mb-4">
+
+🧠 Assistente Inteligente
+
+</h2>
+
+<div class="row">
+
+{% for item in analise %}
+
+<div class="col-lg-6 mb-4">
+
+<div class="card shadow h-100">
+
+<div class="card-body">
+
+<h5>{{ item.titulo }}</h5>
+
+<p class="mb-0">
+
+{{ item.texto }}
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+{% endblock %}

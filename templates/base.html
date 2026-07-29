@@ -2,9 +2,7 @@
 <html lang="pt-br">
 
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>UAN Control Pro</title>
@@ -13,200 +11,225 @@
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo.css') }}">
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <body>
 
+<!-- NAVBAR -->
+
 <nav class="navbar navbar-dark bg-success shadow">
 
-<div class="container-fluid">
+    <div class="container-fluid">
 
-<button
-class="btn btn-success d-md-none"
-type="button"
-data-bs-toggle="offcanvas"
-data-bs-target="#menuMobile">
+        <button
+            class="btn btn-success d-md-none"
+            type="button"
+            data-bs-toggle="offcanvas"
+            data-bs-target="#menuMobile">
 
-<i class="bi bi-list fs-3"></i>
+            <i class="bi bi-list fs-3"></i>
 
-</button>
+        </button>
 
-<a class="navbar-brand fw-bold ms-2" href="/">
-<div class="d-flex justify-content-between w-100 align-items-center">
+        <div class="d-flex justify-content-between align-items-center w-100">
 
-    <a class="navbar-brand fw-bold" href="/">
-        🏥 UAN Control Pro
-    </a>
+            <a class="navbar-brand fw-bold" href="/">
+                🏥 UAN Control Pro
+            </a>
 
-    {% if current_user.is_authenticated %}
+            {% if current_user.is_authenticated %}
 
-    <div class="text-white">
+            <div class="text-white">
 
-        <i class="bi bi-person-circle"></i>
+                <i class="bi bi-person-circle"></i>
 
-        {{ current_user.nome }}
+                {{ current_user.nome }}
 
-        |
+                |
 
-        <a href="{{ url_for('main.logout') }}"
-           class="text-white text-decoration-none">
+                <a href="{{ url_for('main.logout') }}"
+                   class="text-white text-decoration-none">
 
-            Sair
+                    Sair
 
+                </a>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+<!-- MENU MOBILE -->
+
+<div class="offcanvas offcanvas-start" tabindex="-1" id="menuMobile">
+
+    <div class="offcanvas-header">
+
+        <h5 class="offcanvas-title">Menu</h5>
+
+        <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="offcanvas">
+        </button>
+
+    </div>
+
+    <div class="offcanvas-body">
+
+        <a href="/" class="menu-item {% if request.path=='/' %}ativo{% endif %}">
+            🏠 Dashboard
+        </a>
+
+        <a href="/produtos" class="menu-item {% if request.path=='/produtos' %}ativo{% endif %}">
+            📦 Produtos
+        </a>
+
+        <a href="/entrada" class="menu-item {% if request.path=='/entrada' %}ativo{% endif %}">
+            ⬇ Entrada
+        </a>
+
+        <a href="/saida" class="menu-item {% if request.path=='/saida' %}ativo{% endif %}">
+            ⬆ Saída
+        </a>
+
+        <a href="/movimentacoes" class="menu-item {% if request.path=='/movimentacoes' %}ativo{% endif %}">
+            🔄 Movimentações
+        </a>
+
+        <a href="/validade" class="menu-item {% if request.path=='/validade' %}ativo{% endif %}">
+            📅 Validades
+        </a>
+
+        <a href="/compras" class="menu-item {% if request.path=='/compras' %}ativo{% endif %}">
+            🛒 Compras
+        </a>
+
+        <a href="/relatorio/diario"
+           class="menu-item {% if request.path=='/relatorio/diario' %}ativo{% endif %}">
+            📄 Relatório Diário
+        </a>
+
+        <a href="/usuarios"
+           class="menu-item {% if request.path=='/usuarios' %}ativo{% endif %}">
+            👥 Usuários
+        </a>
+
+        <a href="/ia" class="menu-item {% if request.path == '/ia' %}ativo{% endif %}">
+    🤖 Assistente IA
         </a>
 
     </div>
 
-    {% endif %}
-
-</div>
-</a>
-
 </div>
 
-</nav>
-<div class="offcanvas offcanvas-start" tabindex="-1" id="menuMobile">
-
-<div class="offcanvas-header">
-
-<h5>Menu</h5>
-
-<button
-type="button"
-class="btn-close"
-data-bs-dismiss="offcanvas">
-</button>
-
-</div>
-
-<div class="offcanvas-body">
-
-<a href="/" class="menu-item {% if request.path == '/' %}ativo{% endif %}">🏠 Dashboard</a>
-
-<a href="/produtos" class="menu-item {% if request.path == '/' %}ativo{% endif %}">📦 Produtos</a>
-
-<a href="/entrada" class="menu-item {% if request.path == '/' %}ativo{% endif %}">⬇ Entrada</a>
-
-<a href="/saida" class="menu-item {% if request.path == '/' %}ativo{% endif %}">⬆ Saída</a>
-
-<a href="/movimentacoes" class="menu-item {% if request.path == '/' %}ativo{% endif %}">🔄 Movimentações</a>
-
-<a href="/validade" class="menu-item {% if request.path == '/' %}ativo{% endif %}">📅 Validades</a>
-
-<a href="/compras" class="menu-item {% if request.path == '/' %}ativo{% endif %}">🛒 Compras</a>
-
-</div>
-
-</div>
 
 <div class="container-fluid">
 
-<div class="row">
+    <div class="row">
 
-    <div class="col-md-2 menu-lateral">
+        <!-- MENU LATERAL -->
 
-<a href="/" class="menu-item">
-<i class="bi bi-speedometer2"></i>
-Dashboard
-</a>
+        <div class="col-lg-2 col-md-3 menu-lateral">
 
-<a href="/produtos" class="menu-item">
-<i class="bi bi-box"></i>
-Produtos
-</a>
+            <a href="/" class="menu-item {% if request.path=='/' %}ativo{% endif %}">
+                <i class="bi bi-speedometer2"></i>
+                Dashboard
+            </a>
 
-<a href="/entrada" class="menu-item">
-<i class="bi bi-box-arrow-in-down"></i>
-Entrada
-</a>
+            <a href="/produtos" class="menu-item {% if request.path=='/produtos' %}ativo{% endif %}">
+                <i class="bi bi-box"></i>
+                Produtos
+            </a>
 
-<a href="/saida" class="menu-item">
-<i class="bi bi-box-arrow-up"></i>
-Saída
-</a>
+            <a href="/entrada" class="menu-item {% if request.path=='/entrada' %}ativo{% endif %}">
+                <i class="bi bi-box-arrow-in-down"></i>
+                Entrada
+            </a>
 
-<a href="/movimentacoes" class="menu-item">
-<i class="bi bi-arrow-left-right"></i>
-Movimentações
-</a>
+            <a href="/saida" class="menu-item {% if request.path=='/saida' %}ativo{% endif %}">
+                <i class="bi bi-box-arrow-up"></i>
+                Saída
+            </a>
 
-<a href="/validade" class="menu-item">
-<i class="bi bi-calendar-event"></i>
-Validades
-</a>
+            <a href="/movimentacoes" class="menu-item {% if request.path=='/movimentacoes' %}ativo{% endif %}">
+                <i class="bi bi-arrow-left-right"></i>
+                Movimentações
+            </a>
 
-<a href="/compras" class="menu-item">
-<i class="bi bi-cart3"></i>
-Lista de Compras
-</a>
+            <a href="/validade" class="menu-item {% if request.path=='/validade' %}ativo{% endif %}">
+                <i class="bi bi-calendar-event"></i>
+                Validades
+            </a>
 
-</div>
+            <a href="/compras" class="menu-item {% if request.path=='/compras' %}ativo{% endif %}">
+                <i class="bi bi-cart3"></i>
+                Compras
+            </a>
 
-<div class="col-md-10 conteudo">
+            <a href="/relatorio/diario"
+               class="menu-item {% if request.path=='/relatorio/diario' %}ativo{% endif %}">
+                <i class="bi bi-file-earmark-text"></i>
+                Relatório Diário
+            </a>
 
-{% with mensagens = get_flashed_messages(with_categories=true) %}
+            <a href="/usuarios"
+               class="menu-item {% if request.path=='/usuarios' %}ativo{% endif %}">
+                <i class="bi bi-people"></i>
+                Usuários
+            </a>
+            
+            <a href="/ia" class="menu-item {% if request.path == '/ia' %}ativo{% endif %}">
+    🧠 Assistente IA
+            </a>
+          
 
-{% if mensagens %}
+        </div>
 
-{% for categoria, mensagem in mensagens %}
 
-<div class="alert alert-{{ categoria }} mt-3">
+        <!-- CONTEÚDO -->
 
-{{ mensagem }}
+        <div class="col-lg-10 col-md-9 col-12 conteudo">
 
-</div>
+            {% with mensagens = get_flashed_messages(with_categories=true) %}
 
-{% endfor %}
+                {% if mensagens %}
 
-{% endif %}
+                    {% for categoria, mensagem in mensagens %}
 
-{% endwith %}
+                        <div class="alert alert-{{ categoria }} mt-3">
 
-{% block conteudo %}
+                            {{ mensagem }}
 
-{% endblock %}
+                        </div>
 
-</div>
+                    {% endfor %}
 
-<a href="/usuarios" class="menu-item">
-    <i class="bi bi-people-fill"></i>
-    Usuários
-</a>
+                {% endif %}
 
-</div>
+            {% endwith %}
 
-</div>
+            {% block conteudo %}
+            {% endblock %}
 
-<div class="creditos-info">
-
-    <i class="bi bi-info-circle-fill"></i>
-
-    <div class="creditos-tooltip">
-
-        <h6>UAN Control Pro</h6>
-
-        <p>Versão 1.0</p>
-
-        <hr>
-
-        <strong>Desenvolvido por</strong>
-
-        <div>Antonio Gomes</div>
-
-        <small>@editorpardal</small>
+        </div>
 
     </div>
 
 </div>
 
-<!-- Créditos -->
-<div class="creditos-info" title="Sobre o sistema">
+
+<!-- CRÉDITOS -->
+
+<div class="creditos-info">
 
     <i class="bi bi-info-circle"></i>
 
@@ -228,39 +251,30 @@ Lista de Compras
 
 </div>
 
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <script>
-document.addEventListener("DOMContentLoaded", function () {
 
-    // Fecha o menu mobile ao clicar em um item
-    document.querySelectorAll("#menuMobile a").forEach(function(link){
+document.querySelectorAll("#menuMobile a").forEach(link => {
 
-        link.addEventListener("click", function(){
+    link.addEventListener("click", () => {
 
-            const menu = bootstrap.Offcanvas.getInstance(
-                document.getElementById("menuMobile")
-            );
+        const menu = bootstrap.Offcanvas.getInstance(
+            document.getElementById("menuMobile")
+        );
 
-            if(menu){
-                menu.hide();
-            }
-
-            // Faz a página abrir já no topo
-            window.scrollTo({
-                top: 0,
-                behavior: "instant"
-            });
-
-        });
+        if(menu){
+            menu.hide();
+        }
 
     });
 
 });
+
 </script>
 
 </body>
-
-</html>
-
-</body>
-
 </html>

@@ -15,3 +15,5 @@ from . import validade
 from . import relatorio
 from . import auth
 from . import usuarios
+from . import relatorio_diario
+from . import ia
